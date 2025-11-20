@@ -20,7 +20,7 @@ for clave, valor in diccionario.items():
 nombre = input("Ingrese nombre del producto: ")
 marca = input("Ingrese marca del producto: ")
 modelo = input("Ingrese modelo del producto: ")
-precio = int(input("Ingrese precio del producto"))
+precio = int(input("Ingrese precio del producto: "))
 
 detalle_producto = [marca, modelo, precio]
 diccionario[nombre] = detalle_producto
