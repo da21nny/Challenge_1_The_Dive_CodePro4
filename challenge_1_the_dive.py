@@ -1,4 +1,3 @@
-import random
 import time
 import math
 
@@ -22,7 +21,7 @@ def laberinto_fijo():
     return matriz
 
 laberinto = laberinto_fijo()
-raton, gato, salida = (1,1), (5,9), (9,9)
+raton, gato, salida = (5,9), (1,1), (9,9)
 
 def movimientos_validos(posicion, laberinto):
     validos = []
@@ -50,12 +49,24 @@ def mostrar_laberinto_fijo(raton, gato, salida, raton_visible):
         print(dibujo)
     print()
 
-def calcular_distancia(dist_a, dist_b):
-    return (abs(dist_a[0] - dist_b[0]) + abs(dist_a[1] - dist_b[1]))
+def distania_real(laberinto, inicio, objetivo):
+    if inicio == objetivo:
+        return 0
+    cola = [(inicio, 0)]
+    visitados = {inicio}
+    while cola:
+        (x, y), distancia = cola.pop(0)
+        for nx, ny in movimientos_validos((x, y), laberinto):
+            if (nx, ny) == objetivo:
+                return distancia + 1
+            if (nx, ny) not in visitados:
+                visitados.add((nx, ny))
+                cola.append(((nx, ny), distancia + 1))
+    return math.inf
 
-def evualuar_estado(raton, gato, salida):
-    dist_raton_gato = calcular_distancia(raton, gato)
-    dist_raton_salida = calcular_distancia(raton, salida)
+def evualuar_estado(laberinto, raton, gato, salida):
+    dist_raton_gato = distania_real(laberinto, raton, gato)
+    dist_raton_salida = distania_real(laberinto,raton, salida)
     valor = (dist_raton_gato * 3) - (dist_raton_salida * 4)
 
     if raton == gato:
@@ -67,7 +78,7 @@ def evualuar_estado(raton, gato, salida):
 
 def minimax(laberinto, raton, gato, salida, profundidad, es_turno_raton):
     if raton == gato or raton == salida or profundidad == 0:
-        return evualuar_estado(raton, gato, salida)
+        return evualuar_estado(laberinto, raton, gato, salida)
     
     if es_turno_raton:
         mejor_puntaje = -math.inf
@@ -115,12 +126,12 @@ def encontrar_mejor_movimiento(laberinto, pos_personaje, pos_rival, salida, es_m
 
 
 es_turno_raton = True
-contador_turno = 0
+contador_turno = 1
 
 while True:
     print(f"Turno: {contador_turno} - {'Raton' if es_turno_raton else 'Gato'}")
     mostrar_laberinto_fijo(raton, gato, salida, raton_visible = True)
-    time.sleep(1)
+    time.sleep(0.5)
 
     if es_turno_raton:
         nuevo_raton, _ = encontrar_mejor_movimiento(laberinto, raton, gato, salida, True, MAX_PROFUNDIDAD)
