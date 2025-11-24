@@ -1,0 +1,16 @@
+Desarrolle un juego de laberinto del Gato y raton utilizando el algoritmo Minimax en Python.
+
+El programa incluye varias funciones:
+-Funcion laberinto donde se define una matriz de 11x11.
+-Funcion movimientos_validos donde se asegura que sean correctos los movimiento del gato y raton
+-Funcion mostrar_laberinto_fijo donde imprime en consola el laberinto para que el usuario pueda ver el resultado.
+-Funcion distancia_real, usa algoritmo BFS para buscar el mejor camino mas corto y efectivo, es optimo y no genera oscilaciones.
+-Funcion evaluar_estado, calcula valores para que la funcion minimax de resultados.
+-Funcion minimax, algoritmo principal para que los personajes tomen decisiones en base a la funcion evaluar_estado.
+-Funcion encontrar_mejor_movimiento, para que los personajes encuentren el mejor camino posible.
+-Y el ciclo while donde se ejecute el codigo y dependiendo de las condiciones, muestre en pantalla los resultados posibles.
+
+*Esto funciona bien, se puede mejorar, agregar mas detalles, se puede mejorar el laberinto a uno aleatorio.
+*El desastre fue al llamar funciones que daban valores no deseados, movimientos erraticos por parte del gato y raton(oscilaban de arriba-abajo)
+ crasheos en plena ejecucion del programa por alteracion de valores.
+*El mejor !AJA fue cuando logre hacer que los personajes puedan moverse sin oscilar y cuando pude manejar los valores erroneos que daban algunas funciones. 
