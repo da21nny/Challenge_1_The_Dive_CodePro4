@@ -55,13 +55,13 @@ def distania_real(laberinto, inicio, objetivo):
     cola = [(inicio, 0)]
     visitados = {inicio}
     while cola:
-        (x, y), distancia = cola.pop(0)
-        for nx, ny in movimientos_validos((x, y), laberinto):
-            if (nx, ny) == objetivo:
+        (dir_x, dir_y), distancia = cola.pop(0)
+        for new_x, new_y in movimientos_validos((dir_x, dir_y), laberinto):
+            if (new_x, new_y) == objetivo:
                 return distancia + 1
-            if (nx, ny) not in visitados:
-                visitados.add((nx, ny))
-                cola.append(((nx, ny), distancia + 1))
+            if (new_x, new_y) not in visitados:
+                visitados.add((new_x, new_y))
+                cola.append(((new_x, new_y), distancia + 1))
     return math.inf
 
 def evualuar_estado(laberinto, raton, gato, salida):
