@@ -1,12 +1,13 @@
 import time
 import math
 
-MAX_PROFUNDIDAD = 3 #Variable constante - Define la profundidad del MiniMax
+MAX_PROFUNDIDAD = 3 # Variable constante - Define la profundidad del MiniMax
 
 movimientos = [(1,0), (-1,0), (0,1), (0,-1)] # Variable Global: Derecha, Izquierda, Arriba, Abajo
 
+# Funcion donde creamos una matriz que sera nuestro Laberinto Fijos
 def laberinto_fijo():
-    #Laberinto definido 11x11 - Impar para tener paredes exteriores - 0 es Camino - 1 es Pared
+    # Creamos una matriz 11x11 - Impar para tener paredes exteriores - 0 es Camino - 1 es Pared
     matriz = [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
               [1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1],
               [1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1],
@@ -18,11 +19,15 @@ def laberinto_fijo():
               [1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1],
               [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
               [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]]
-    return matriz
+    return matriz #Retornamos Matriz
 
-laberinto = laberinto_fijo()
-raton, gato, salida = (5,9), (1,1), (9,9)
+# Inicializamos la variable Laberinto que tendra la matriz de la funcion
+laberinto = laberinto_fijo() 
 
+# Definimos las posiciones del Gato, Raton y Salida
+raton, gato, salida = (5,9), (1,1), (9,9) 
+
+# Funcion para determinar los movimientos validos
 def movimientos_validos(posicion, laberinto):
     validos = []
     for dir_x, dir_y in movimientos:
@@ -32,6 +37,7 @@ def movimientos_validos(posicion, laberinto):
                 validos.append((new_x, new_y))
     return validos
 
+# Funcion para mostrar el laberinto en consola
 def mostrar_laberinto_fijo(raton, gato, salida, raton_visible):
     for fila in range(len(laberinto)):
         dibujo = ""
@@ -49,7 +55,8 @@ def mostrar_laberinto_fijo(raton, gato, salida, raton_visible):
         print(dibujo)
     print()
 
-def distania_real(laberinto, inicio, objetivo):
+# Funcion BFS que calcula la distancia real entre inicio y objetivo
+def distancia_real(laberinto, inicio, objetivo):
     if inicio == objetivo:
         return 0
     cola = [(inicio, 0)]
@@ -64,9 +71,10 @@ def distania_real(laberinto, inicio, objetivo):
                 cola.append(((new_x, new_y), distancia + 1))
     return math.inf
 
+# Funcion que evalua valores que requiere para funcionar el MiniMax
 def evualuar_estado(laberinto, raton, gato, salida):
-    dist_raton_gato = distania_real(laberinto, raton, gato)
-    dist_raton_salida = distania_real(laberinto,raton, salida)
+    dist_raton_gato = distancia_real(laberinto, raton, gato)
+    dist_raton_salida = distancia_real(laberinto,raton, salida)
     valor = (dist_raton_gato * 3) - (dist_raton_salida * 4)
 
     if raton == gato:
@@ -76,6 +84,7 @@ def evualuar_estado(laberinto, raton, gato, salida):
     
     return valor
 
+# Funcion que contiene el algoritmo Minimax, funcion que le da inteligencia a los personajes
 def minimax(laberinto, raton, gato, salida, profundidad, es_turno_raton):
     if raton == gato or raton == salida or profundidad == 0:
         return evualuar_estado(laberinto, raton, gato, salida)
@@ -93,6 +102,7 @@ def minimax(laberinto, raton, gato, salida, profundidad, es_turno_raton):
             peor_puntaje = min(valor_minimax, peor_puntaje)
         return peor_puntaje
 
+# Funcion para que los personajes tengan el mejor movimiento respecto a su rival
 def encontrar_mejor_movimiento(laberinto, pos_personaje, pos_rival, salida, es_maximizador, profundidad):
     if es_maximizador:
         mejor_valor = -math.inf
@@ -124,10 +134,11 @@ def encontrar_mejor_movimiento(laberinto, pos_personaje, pos_rival, salida, es_m
 
     return mejor_mov, mejor_valor
 
-
+#Banderas para el Ciclo While
 es_turno_raton = True
 contador_turno = 1
 
+# Ciclo while para que se ejecute el programa
 while True:
     print(f"Turno: {contador_turno} - {'Raton' if es_turno_raton else 'Gato'}")
     mostrar_laberinto_fijo(raton, gato, salida, raton_visible = True)
@@ -164,3 +175,4 @@ while True:
 
     contador_turno += 1
     es_turno_raton = not es_turno_raton
+# Fin del Codigo
