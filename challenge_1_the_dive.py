@@ -71,7 +71,7 @@ def distancia_real(laberinto, inicio, objetivo):
     if inicio == objetivo:
         return 0
     
-    cola = deque([(inicio, 0)]) # Cola de tuplas (posicion inicial, distancia)
+    cola = deque([(inicio, 0)]) # Cola para BFS, almacenando tuplas de (posicion, distancia)
     visitados = {inicio} # Conjunto de posiciones visitadas (Set)
 
     # Bucle BFS
