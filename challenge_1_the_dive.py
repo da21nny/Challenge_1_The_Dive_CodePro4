@@ -1,5 +1,6 @@
 import time
 import math
+import random
 
 # Variables constantes
 MAX_PROFUNDIDAD = 3                 # Define la profundidad del MiniMax
@@ -7,6 +8,7 @@ PUNTAJE_GATO_CAPTURA_RATON = -1000  # Puntaje cuando el gato captura al raton
 PUNTAJE_RATON_ESCAPA = 1000         # Puntaje cuando el raton escapa
 PESO_DIST_RATON_GATO = 3            # Peso distancia entre gato y raton
 PESO_DIST_RATON_SALIDA = 4          # Peso distancia entre raton y salida
+TURNOS_ALEATORIOS = 5               # Numero de turnos iniciales con movimiento aleatorio para el raton
 
 movimientos = [(1,0), (-1,0), (0,1), (0,-1)] # Variable Global: Derecha, Izquierda, Arriba, Abajo
 
@@ -16,11 +18,11 @@ def laberinto_fijo():
     matriz = [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
               [1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1],
               [1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1],
-              [1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1],
+              [1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1],
               [1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1],
-              [1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1],
+              [1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1],
               [1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1],
-              [1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1],
+              [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1],
               [1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1],
               [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
               [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]]
@@ -30,7 +32,7 @@ def laberinto_fijo():
 laberinto = laberinto_fijo() 
 
 # Definimos las posiciones del Gato, Raton y Salida
-raton, gato, salida = (5,9), (1,1), (9,9) 
+gato, raton, salida = (5,9), (1,1), (9,9) 
 
 # Funcion para determinar los movimientos validos
 def movimientos_validos(posicion, laberinto):
@@ -151,6 +153,7 @@ def encontrar_mejor_movimiento(laberinto, pos_personaje, pos_rival, salida, es_m
 #Banderas para el Ciclo While
 es_turno_raton = True
 contador_turno = 1
+turnos_jugados_raton = 0
 
 # Ciclo while para que se ejecute el programa
 while True:
@@ -159,8 +162,17 @@ while True:
     time.sleep(0.5)
 
     # Logica de Turnos    
-    if es_turno_raton:
-        nuevo_raton, _ = encontrar_mejor_movimiento(laberinto, raton, gato, salida, True, MAX_PROFUNDIDAD) # Obtener mejor movimiento para el raton
+    if es_turno_raton: # Turno del Raton
+        if turnos_jugados_raton < TURNOS_ALEATORIOS: # Movimiento aleatorio inicial para el raton
+            movs = movimientos_validos(raton, laberinto) # Obtener movimientos validos
+            if movs: # Si hay movimientos validos
+                nuevo_raton = random.choice(movs) # Elegir un movimiento aleatorio
+            else: # Si no hay movimientos validos, el raton se queda en su lugar
+                nuevo_raton = raton 
+            print(f"Raton se mueve aleatoriamente ({turnos_jugados_raton + 1}/{TURNOS_ALEATORIOS})")
+            turnos_jugados_raton += 1 # Incrementamos el contador de turnos jugados por el raton
+        else: # Movimiento inteligente con Minimax
+            nuevo_raton, _ = encontrar_mejor_movimiento(laberinto, raton, gato, salida, True, MAX_PROFUNDIDAD) # Obtener mejor movimiento para el raton
         raton = nuevo_raton # Actualizar posicion del raton
         print(f"Raton se movio a : {raton}")
         if raton == gato: # Si el raton es capturado por el gato
@@ -171,7 +183,7 @@ while True:
             print("Raton logró escapar del Laberinto")
             mostrar_laberinto_fijo(raton, gato, salida, raton_visible = False)
             break
-    else:
+    else: # Turno del Gato
         nuevo_gato, _ = encontrar_mejor_movimiento(laberinto, gato, raton, salida, False, MAX_PROFUNDIDAD) # Obtener mejor movimiento para el gato
         gato = nuevo_gato # Actualizar posicion del gato
         print(f"El gato se movio a : {gato}")
