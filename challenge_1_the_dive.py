@@ -3,14 +3,13 @@ import math
 import random
 
 # Variables constantes
-MAX_PROFUNDIDAD = 3                 # Define la profundidad del MiniMax
-PUNTAJE_GATO_CAPTURA_RATON = -1000  # Puntaje cuando el gato captura al raton
-PUNTAJE_RATON_ESCAPA = 1000         # Puntaje cuando el raton escapa
-PESO_DIST_RATON_GATO = 3            # Peso distancia entre gato y raton
-PESO_DIST_RATON_SALIDA = 4          # Peso distancia entre raton y salida
-TURNOS_ALEATORIOS = 5               # Numero de turnos iniciales con movimiento aleatorio para el raton
-
-movimientos = [(1,0), (-1,0), (0,1), (0,-1)] # Variable Global: Derecha, Izquierda, Arriba, Abajo
+MAX_PROFUNDIDAD = 3                             # Define la profundidad del MiniMax
+PUNTAJE_GATO_CAPTURA_RATON = -1000              # Puntaje cuando el gato captura al raton
+PUNTAJE_RATON_ESCAPA = 1000                     # Puntaje cuando el raton escapa
+PESO_DIST_RATON_GATO = 3                        # Peso distancia entre gato y raton
+PESO_DIST_RATON_SALIDA = 4                      # Peso distancia entre raton y salida
+TURNOS_ALEATORIOS = 5                           # Numero de turnos iniciales con movimiento aleatorio para el raton
+MOVIMIENTOS = [(1,0), (-1,0), (0,1), (0,-1)]    # Variable Global: Derecha, Izquierda, Arriba, Abajo
 
 # Funcion donde creamos una matriz que sera nuestro Laberinto Fijos
 def laberinto_fijo():
@@ -37,7 +36,7 @@ gato, raton, salida = (5,9), (1,1), (9,9)
 # Funcion para determinar los movimientos validos
 def movimientos_validos(posicion, laberinto):
     validos = [] # Lista para almacenar movimientos validos
-    for dir_x, dir_y in movimientos: # Recorremos las direcciones posibles
+    for dir_x, dir_y in MOVIMIENTOS: # Recorremos las direcciones posibles
         new_x, new_y = posicion[0] + dir_x, posicion[1] + dir_y # Calculamos nueva posicion
          # Verificamos si la nueva posicion esta dentro de los limites del laberinto y es un camino (0)
         if 0 <= new_x < len(laberinto) and 0 <= new_y < len(laberinto[0]):
