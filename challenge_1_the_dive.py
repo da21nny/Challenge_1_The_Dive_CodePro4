@@ -1,6 +1,7 @@
 import time
 import math
 import random
+from collections import deque
 
 # Variables constantes
 MAX_PROFUNDIDAD = 3                             # Define la profundidad del MiniMax
@@ -70,13 +71,13 @@ def distancia_real(laberinto, inicio, objetivo):
     if inicio == objetivo:
         return 0
     
-    cola = [(inicio, 0)] # Cola de tuplas (posicion inicial, distancia)
+    cola = deque([(inicio, 0)]) # Cola de tuplas (posicion inicial, distancia)
     visitados = {inicio} # Conjunto de posiciones visitadas (Set)
 
     # Bucle BFS
     while cola:
         #Posicion_actual es una Tupla de Coordenadas (x, y)
-        posicion_actual, distancia = cola.pop(0) # Desencolar el primer elemento
+        posicion_actual, distancia = cola.popleft() # Desencolar el primer elemento
         for posicion_nueva in movimientos_validos(posicion_actual, laberinto):
             #Posicion_nueva es una Tupla de Coordenadas (x, y)
             if posicion_nueva == objetivo: # Si llegamos al objetivo
